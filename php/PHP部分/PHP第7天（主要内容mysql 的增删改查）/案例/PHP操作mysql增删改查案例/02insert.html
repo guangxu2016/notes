@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<title>网页标题</title>
+	<meta name="keywords" content="关键字列表" />
+	<meta name="description" content="网页描述" />
+	<link rel="stylesheet" type="text/css" href="" />
+	<style type="text/css"></style>
+	<script type="text/javascript"></script>
+</head>
+<body>
+	<form action = '02receiver.php' method="post">
+		<label>用户名:<input type="text" name="username"/></label><br/><br/>
+		<label>真名:<input type="text" name="truename"/></label><br/><br/>
+		<label>密码:<input type="password" name="password1"/></label><br/><br/>
+		<label>确认密码:<input type="password" name="password2"/></label><br/><br/>
+		部门:
+		<select name="department">
+			<option value="IT">IT</option>
+			<option value="Accounting">财务</option>
+			<option value="HR">人事</option>
+			<option value="sales">销售</option>
+		</select><br/><br/>
+		<label>权限:<input type="text" name="rights"/></label><br/><br/>
+		<input type="submit" value="提交"/>
+	</form>
+</body>
+</html>

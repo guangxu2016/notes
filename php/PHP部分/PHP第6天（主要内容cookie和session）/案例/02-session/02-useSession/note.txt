@@ -1,0 +1,6 @@
+思路:
+    我们先访问 index.php 页面, 被该值需要先 "登录"
+    等待 几秒钟, 跳转到登录页面( index.html )
+    在登录页面我们使用 session, 同时存储用户输入的用户名
+    登录, 进入 index.php 页面将 用户名存储到 session 中, 重定向到 index.php
+    页面上展示 xxx 登录成功

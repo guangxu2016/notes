@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTTP请求报文和HTTP响应报文 - as_ - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/bundle-AnotherEon001.css">
+<link id="mobile-style" media="only screen and (max-width: 768px)" type="text/css" rel="stylesheet" href="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/bundle-AnotherEon001-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/biyeymyhjob/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/biyeymyhjob/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/biyeymyhjob/wlwmanifest.xml">
+<script type="text/javascript" src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/encoder.js.下载"></script><script src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/jquery.js.下载" type="text/javascript"></script>  
+<script type="text/javascript">var currentBlogApp = 'biyeymyhjob', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+
+<div id="wrapper">
+<div id="header">
+
+<div id="top">
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/biyeymyhjob/">华山大师兄</a></h1>
+<div id="subtitle"></div>
+</div>
+<div id="sub"><div id="blog_stats">
+<div class="BlogStats">随笔 - 150, 文章 - 0, 评论 - 159, 引用 - 0</div>
+</div></div>
+
+
+
+</div>
+<div id="main_container">
+<div id="main_content">
+<div id="content">
+	
+<div id="post_detail">
+	<div class="post">
+		<h2>
+			<a id="cb_post_title_url" href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html">HTTP请求报文和HTTP响应报文</a>
+		</h2>
+		<div class="postbody">
+		<div id="cnblogs_post_body"><p><span style="color: #000000;">HTTP报文是面向文本的，报文中的每一个字段都是一些ASCII码串，各个字段的长度是不确定的。HTTP有两类报文：请求报文和响应报文。</span></p>
+<p><strong><span style="color: #000080;">HTTP请求报文</span></strong></p>
+<p>一个HTTP请求报文由<span style="color: #ff0000;">请求行（request line）、请求头部（header）、空行</span>和<span style="color: #ff0000;">请求数据</span>4个部分组成，下图给出了请求报文的一般格式。</p>
+<p><img src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/2012072810301161.png" alt=""></p>
+<p>or</p>
+<p>＜request-line＞<br><br>＜headers＞<br><br>＜blank line＞<br><br>[＜request-body＞</p>
+<p>&nbsp;</p>
+<p><strong>1.请求头</strong></p>
+<p>请求行由请求方法字段、URL字段和HTTP协议版本字段3个字段组成，它们用空格分隔。例如，GET /index.html HTTP/1.1。</p>
+<p>HTTP协议的请求方法有GET、POST、HEAD、PUT、DELETE、OPTIONS、TRACE、CONNECT。</p>
+<p>而常见的有如下几种：</p>
+<p><strong>1).GET</strong></p>
+<p>最常见的一种请求方式，当客户端要从服务器中读取文档时，当点击网页上的链接或者通过在浏览器的地址栏输入网址来浏览网页的，使用的都是GET方式。GET方法<span style="color: #ff0000;">要求服务器将URL定位的资源放在响应报文的数据部分，回送给客户端</span>。使用GET方法时，请求参数和对应的值附加在URL后面，利用一个问号（“?”）代表URL的结尾与请求参数的开始，<span style="color: #ff0000;">传递参数长度受限制</span>。例如，/index.jsp?id=100&amp;op=bind,这样通过GET方式传递的数据直接表示在地址中，所以我们可以把请求结果以链接的形式发送给好友。以用google搜索domety为例，Request格式如下：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre>GET /search?hl=zh-CN<span style="color: #ff0000;">&amp;source</span>=hp<span style="color: #ff0000;">&amp;q</span>=domety<span style="color: #ff0000;">&amp;aq</span>=f<span style="color: #ff0000;">&amp;oq</span><span style="color: #000000;">= HTTP/1.1  
+Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/vnd.ms-excel, application/vnd.ms-powerpoint, <br>application/msword, application/x-silverlight, application/x-shockwave-flash, */*  
+Referer: </span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">a </span><span style="color: #ff0000;">href</span><span style="color: #0000ff;">="http://www.google.cn/"</span><span style="color: #0000ff;">&gt;</span>http://www.google.cn/<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">a</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;">  
+Accept-Language: zh-cn  
+Accept-Encoding: gzip, deflate  
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; TheWorld)  
+Host: </span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">a </span><span style="color: #ff0000;">href</span><span style="color: #0000ff;">="http://www.google.cn"</span><span style="color: #0000ff;">&gt;</span>www.google.cn<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">a</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;">  
+Connection: Keep-Alive  
+Cookie: PREF=ID=80a06da87be9ae3c:U=f7167333e2c3b714:NW=1:TM=1261551909:LM=1261551917:S=ybYcq2wpfefs4V9g; <br>NID=31=ojj8d-IygaEtSxLgaJmqSjVhCspkviJrB6omjamNrSm8lZhKy_yMfO2M4QMRKcH1g0iQv9u-2hfBW7bUFwVh7pGaRUb0RnHcJU37y-<br>FxlRugatx63JLv7CWMD6UB_O_r  </span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>可以看到，GET方式的请求一般不包含”请求内容”部分，请求数据以地址的形式表现在请求行。地址链接如下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">a </span><span style="color: #ff0000;">href</span><span style="color: #0000ff;">="http://www.google.cn/search?hl=zh-CN&amp;source=hp&amp;q=domety&amp;aq=f&amp;oq="</span><span style="color: #0000ff;">&gt;</span>http://www.google.cn/search?hl=zh-CN<span style="color: #ff0000;">&amp;source</span>=hp<br><span style="color: #ff0000;">&amp;q</span>=domety<span style="color: #ff0000;">&amp;aq</span>=f<span style="color: #ff0000;">&amp;oq</span>=<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">a</span><span style="color: #0000ff;">&gt;</span> </pre>
+</div>
+<p>地址中”?”之后的部分就是通过GET发送的请求数据，我们可以在地址栏中清楚的看到，各个数据之间用”&amp;”符号隔开。显然，这种方式<span style="color: #ff0000;">不适合传送私密数据</span>。另外，由于不同的浏览器对地址的字符限制也有所不同，一般最多只能识别1024个字符，所以如果<span style="color: #ff0000;">需要传送大量数据的时候，也不适合使用GET方式</span>。</p>
+<p>&nbsp;</p>
+<p><strong>2).POST</strong></p>
+<p>对于上面提到的不适合使用GET方式的情况，可以考虑使用POST方式，因为使用POST方法可以允许客户端给服务器提供信息较多。POST方法将请求参数封装在HTTP请求数据中，以名称/值的形式出现，可以传输大量数据，这样POST方式对传送的数据大小没有限制，而且也不会显示在URL中。还以上面的搜索domety为例，如果使用POST方式的话，格式如下：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #000000;">POST /search HTTP/1.1  
+Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/vnd.ms-excel, application/vnd.ms-powerpoint, <br>application/msword, application/x-silverlight, application/x-shockwave-flash, */*  
+Referer: </span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">a </span><span style="color: #ff0000;">href</span><span style="color: #0000ff;">="http://www.google.cn/"</span><span style="color: #0000ff;">&gt;</span>http://www.google.cn/<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">a</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;">  
+Accept-Language: zh-cn  
+Accept-Encoding: gzip, deflate  
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; TheWorld)  
+Host: </span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">a </span><span style="color: #ff0000;">href</span><span style="color: #0000ff;">="http://www.google.cn"</span><span style="color: #0000ff;">&gt;</span>www.google.cn<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">a</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;">  
+Connection: Keep-Alive  
+Cookie: PREF=ID=80a06da87be9ae3c:U=f7167333e2c3b714:NW=1:TM=1261551909:LM=1261551917:S=ybYcq2wpfefs4V9g; <br>NID=31=ojj8d-IygaEtSxLgaJmqSjVhCspkviJrB6omjamNrSm8lZhKy_yMfO2M4QMRKcH1g0iQv9u-2hfBW7bUFwVh7pGaRUb0RnHcJU37y-<br>FxlRugatx63JLv7CWMD6UB_O_r  
+
+hl=zh-CN</span><span style="color: #ff0000;">&amp;source</span>=hp<span style="color: #ff0000;">&amp;q</span>=domety  </pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>可以看到，POST方式请求行中不包含数据字符串，这些数据保存在”请求内容”部分，各数据之间也是使用”&amp;”符号隔开。POST方式大多用于页面的表单中。因为POST也能完成GET的功能，因此多数人在设计表单的时候一律都使用POST方式，其实这是一个误区。GET方式也有自己的特点和优势，我们应该根据不同的情况来选择是使用GET还是使用POST。</p>
+<p>&nbsp;</p>
+<p><strong>3).HEAD</strong></p>
+<p>HEAD就像GET，只不过服务端接受到HEAD请求后只返回响应头，而不会发送响应内容。当我们只需要查看某个页面的状态的时候，使用HEAD是非常高效的，因为在传输的过程中省去了页面内容。</p>
+<p>&nbsp;</p>
+<p><strong>2.请求头部</strong></p>
+<p>请求头部由<span style="color: #ff0000;">关键字/值对组成，每行一对，关键字和值用英文冒号“:”分隔</span>。请求头部通知服务器有关于客户端请求的信息，典型的请求头有：</p>
+<p>User-Agent：产生请求的浏览器类型。</p>
+<p>Accept：客户端可识别的内容类型列表。</p>
+<p>Host：请求的主机名，允许多个域名同处一个IP地址，即虚拟主机。</p>
+<p>&nbsp;</p>
+<p><strong>3.空行</strong></p>
+<p>最后一个请求头之后是一个空行，<span style="color: #ff0000;">发送回车符和换行符，通知服务器以下不再有请求头</span>。</p>
+<p>&nbsp;</p>
+<p><strong>4.请求数据</strong></p>
+<p><span style="color: #ff0000;">请求数据不在GET方法中使用</span>，<span style="color: #ff0000;">而是在POST方法中使用</span>。POST方法适用于需要客户填写表单的场合。与请求数据相关的最常使用的请求头是Content-Type和Content-Length。</p>
+<p>&nbsp;</p>
+<p><strong><span style="color: #000080;">HTTP报文</span></strong></p>
+<p>HTTP响应也由三个部分组成，分别是：<span style="color: #ff0000;">状态行、消息报头、响应正文。</span></p>
+<p>如下所示，HTTP响应的格式与请求的格式十分类似：<br><br>＜status-line＞<br><br>＜headers＞<br><br>＜blank line＞<br><br>[＜response-body＞]</p>
+<p>&nbsp;正如你所见，在响应中唯一真正的区别在于第一行中用状态信息代替了请求信息。状态行（status line）通过提供一个状态码来说明所请求的资源情况。</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p style="text-indent: 2em;">状态行格式如下：</p>
+<p style="text-align: left; text-indent: 2em;">HTTP-Version Status-Code Reason-Phrase CRLF</p>
+<p style="text-align: left; text-indent: 2em;">其中，HTTP-Version表示服务器HTTP协议的版本；Status-Code表示服务器发回的响应状态代码；Reason-Phrase表示状态代码的文本描述。状态代码由三位数字组成，第一个数字定义了响应的类别，且有五种可能取值。</p>
+<ul>
+<li>1xx：指示信息--表示请求已接收，继续处理。</li>
+<li>2xx：成功--表示请求已被成功接收、理解、接受。</li>
+<li>3xx：重定向--要完成请求必须进行更进一步的操作。</li>
+<li>4xx：客户端错误--请求有语法错误或请求无法实现。</li>
+<li>5xx：服务器端错误--服务器未能实现合法的请求。</li>
+
+
+</ul>
+<p>常见状态代码、状态描述的说明如下。</p>
+<ul>
+<li>200 OK：客户端请求成功。</li>
+<li>400 Bad Request：客户端请求有语法错误，不能被服务器所理解。</li>
+<li>401 Unauthorized：请求未经授权，这个状态代码必须和WWW-Authenticate报头域一起使用。</li>
+<li>403 Forbidden：服务器收到请求，但是拒绝提供服务。</li>
+<li>404 Not Found：请求资源不存在，举个例子：输入了错误的URL。</li>
+<li>500 Internal Server Error：服务器发生不可预期的错误。</li>
+<li>503 Server Unavailable：服务器当前不能处理客户端的请求，一段时间后可能恢复正常，举个例子：HTTP/1.1 200 OK（CRLF）。</li>
+
+
+</ul>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>下面给出一个HTTP响应报文例子</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #000000;">HTTP/1.1 200 OK
+Date: Sat, 31 Dec 2005 23:59:59 GMT
+Content-Type: text/html;charset=ISO-8859-1
+Content-Length: 122
+
+＜html＞
+＜head＞
+＜title＞Wrox Homepage＜/title＞
+＜/head＞
+＜body＞
+＜!-- body goes here --＞
+＜/body＞
+＜/html＞</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p><br>&nbsp;</p>
+<p><strong><span style="color: #000080;">关于HTTP请求GET和POST的区别</span></strong></p>
+<p>&nbsp;</p>
+<p>1.<span style="color: #ff0000;">GET提交，请求的数据会附在URL之后（就是把数据放置在HTTP协议头＜request-line＞中）</span>，以?分割URL和传输数据，多个参数用&amp;连接;例如：login.action?name=hyddd&amp;password=idontknow&amp;verify=%E4%BD%A0 %E5%A5%BD。如果数据是英文字母/数字，原样发送，如果是空格，转换为+，如果是中文/其他字符，则直接把字符串用BASE64加密，得出如： %E4%BD%A0%E5%A5%BD，其中％XX中的XX为该符号以16进制表示的ASCII。</p>
+<p><span style="color: #ff0000;"><span style="color: #000000;">&nbsp; </span>POST提交：把提交的数据放置在是HTTP包的包体＜request-body＞中</span>。上文示例中红色字体标明的就是实际的传输数据</p>
+<p>&nbsp;&nbsp;因此，<span style="color: #ff0000;">GET提交的数据会在地址栏中显示出来，而POST提交，地址栏不会改变</span></p>
+<p>&nbsp;</p>
+<p>2.传输数据的大小：</p>
+<p>&nbsp;&nbsp; 首先声明,<span style="color: #ff0000;">HTTP协议没有对传输的数据大小进行限制，HTTP协议规范也没有对URL长度进行限制</span>。 而在实际开发中存在的限制主要有：</p>
+<p>&nbsp;&nbsp; GET:<span style="color: #ff0000;">特定浏览器和服务器对URL长度有限制</span>，例如IE对URL长度的限制是2083字节(2K+35)。对于其他浏览器，如Netscape、FireFox等，理论上没有长度限制，其限制取决于操作系统的支持。</p>
+<p>&nbsp;&nbsp;&nbsp;因此对于<span style="color: #ff0000;">GET提交时，传输数据就会受到URL长度的限制。</span></p>
+<p>&nbsp;&nbsp;&nbsp;<span style="color: #ff0000;">POST:由于不是通过URL传值，理论上数据不受限</span>。但实际各个WEB服务器会规定对post提交数据大小进行限制，Apache、IIS6都有各自的配置。</p>
+<p>&nbsp;</p>
+<p>3.安全性：</p>
+<p>&nbsp;&nbsp;&nbsp; <span style="color: #ff0000;">POST的安全性要比GET的安全性高。</span>注意：这里所说的安全性和上面GET提到的“安全”不是同个概念。上面“安全”的含义仅仅是不作数据修改，而这里安全的含义是真正的Security的含义，比如：<span style="color: #ff0000;">通过GET提交数据，用户名和密码将明文出现在URL上，因为(1)登录页面有可能被浏览器缓存， (2)其他人查看浏览器的历史纪录</span>，那么别人就可以拿到你的账号和密码了，</p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/biyeymyhjob/category/395365.html" target="_blank">网络及UNP</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(2612910,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;c874d6d3-41cb-e111-aa3f-842b2b196315&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/biyeymyhjob/" target="_blank"><img src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/u426620.jpg" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/biyeymyhjob/">as_</a><br>
+            <a href="http://home.cnblogs.com/u/biyeymyhjob/followees">关注 - 0</a><br>
+            <a href="http://home.cnblogs.com/u/biyeymyhjob/followers">粉丝 - 461</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;c874d6d3-41cb-e111-aa3f-842b2b196315&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(2612910,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">19</span>
+    </div>
+    <div class="buryit" onclick="votePost(2612910,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+</div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612828.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612828.html" title="发布于2012-07-28 10:06">HTTP协议通信过程汇总</a><br><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/29/2613401.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/29/2613401.html" title="发布于2012-07-29 20:01">红黑树总结</a><br></div>
+</div>
+
+
+		</div>
+		<p class="postfoot">
+			posted on <span id="post-date">2012-07-28 14:17</span> <a href="http://www.cnblogs.com/biyeymyhjob/">as_</a> 阅读(<span id="post_view_count">86835</span>) 评论(<span id="post_comment_count">9</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=2612910" rel="nofollow">编辑</a> <a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html#" onclick="AddToWz(2612910);return false;">收藏</a>
+		</p>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=122253,cb_entryId=2612910,cb_blogApp=currentBlogApp,cb_blogUserGuid='c874d6d3-41cb-e111-aa3f-842b2b196315',cb_entryCreatedDate='2012/7/28 14:17:00';loadViewCount(cb_entryId);</script>
+	
+	</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<a name="评论"></a>
+<div id="comments">
+<h3>评论</h3>
+	
+	
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html#2908466" class="layer">#1楼</a><a name="2908466" id="comment_anchor_2908466"></a>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_2908466" class="blog_comment_body">mark</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2908466,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2908466,&#39;Bury&#39;,this)">反对(0)</a></div>
+				<div class="postfoot">
+					 <span class="comment_date">2014-03-31 23:15</span> | <a id="a_comment_author_2908466" href="http://www.cnblogs.com/wolipengbo/" target="_blank">TealerProg</a> <a href="http://msg.cnblogs.com/send/TealerProg" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html#3031229" class="layer">#2楼</a><a name="3031229" id="comment_anchor_3031229"></a>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_3031229" class="blog_comment_body">很好，解释的很详细，容易懂！我转载一下哈！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3031229,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3031229,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3031229_avatar" style="display:none;">http://pic.cnblogs.com/face/566545/20130910185918.png</span>
+				<div class="postfoot">
+					 <span class="comment_date">2014-09-19 19:10</span> | <a id="a_comment_author_3031229" href="http://www.cnblogs.com/zhuwbox/" target="_blank">水目沾</a> <a href="http://msg.cnblogs.com/send/%E6%B0%B4%E7%9B%AE%E6%B2%BE" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html#3098465" class="layer">#3楼</a><a name="3098465" id="comment_anchor_3098465"></a>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_3098465" class="blog_comment_body">受教了，我也想转载一下。。。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3098465,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3098465,&#39;Bury&#39;,this)">反对(0)</a></div>
+				<div class="postfoot">
+					 <span class="comment_date">2015-01-02 14:31</span> | <a id="a_comment_author_3098465" href="http://www.cnblogs.com/guangshan/" target="_blank">光闪</a> <a href="http://msg.cnblogs.com/send/%E5%85%89%E9%97%AA" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html#3193778" class="layer">#4楼</a><a name="3193778" id="comment_anchor_3193778"></a>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_3193778" class="blog_comment_body">解释的很清楚，在我的博客中加个该文的链接。。。多谢！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3193778,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3193778,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3193778_avatar" style="display:none;">http://pic.cnblogs.com/face/u249494.jpg</span>
+				<div class="postfoot">
+					 <span class="comment_date">2015-05-26 19:32</span> | <a id="a_comment_author_3193778" href="http://www.cnblogs.com/yuanfubiao/" target="_blank">倔强的土豆</a> <a href="http://msg.cnblogs.com/send/%E5%80%94%E5%BC%BA%E7%9A%84%E5%9C%9F%E8%B1%86" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html#3341497" class="layer">#5楼</a><a name="3341497" id="comment_anchor_3341497"></a>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_3341497" class="blog_comment_body">请问博主request与response之间怎么关联呢</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3341497,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3341497,&#39;Bury&#39;,this)">反对(0)</a></div>
+				<div class="postfoot">
+					 <span class="comment_date">2016-01-05 16:51</span> | <a id="a_comment_author_3341497" href="http://home.cnblogs.com/u/873946/" target="_blank">追逐丿</a> <a href="http://msg.cnblogs.com/send/%E8%BF%BD%E9%80%90%E4%B8%BF" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html#3432753" class="layer">#6楼</a><a name="3432753" id="comment_anchor_3432753"></a>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_3432753" class="blog_comment_body">我还以为真是讲请求报文</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3432753,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3432753,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3432753_avatar" style="display:none;">http://pic.cnblogs.com/face/869842/20170606172219.png</span>
+				<div class="postfoot">
+					 <span class="comment_date">2016-05-17 09:39</span> | <a id="a_comment_author_3432753" href="http://www.cnblogs.com/aspnetjia/" target="_blank">网站自由开发者</a> <a href="http://msg.cnblogs.com/send/%E7%BD%91%E7%AB%99%E8%87%AA%E7%94%B1%E5%BC%80%E5%8F%91%E8%80%85" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html#3433768" class="layer">#7楼</a><a name="3433768" id="comment_anchor_3433768"></a>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_3433768" class="blog_comment_body">这个人是转载的别人的文章,根本就不是自己写的</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3433768,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3433768,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3433768_avatar" style="display:none;">http://pic.cnblogs.com/face/869842/20170606172219.png</span>
+				<div class="postfoot">
+					 <span class="comment_date">2016-05-18 10:18</span> | <a id="a_comment_author_3433768" href="http://www.cnblogs.com/aspnetjia/" target="_blank">网站自由开发者</a> <a href="http://msg.cnblogs.com/send/%E7%BD%91%E7%AB%99%E8%87%AA%E7%94%B1%E5%BC%80%E5%8F%91%E8%80%85" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html#3585545" class="layer">#8楼</a><a name="3585545" id="comment_anchor_3585545"></a>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_3585545" class="blog_comment_body">受教了</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3585545,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3585545,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3585545_avatar" style="display:none;">http://pic.cnblogs.com/face/797274/20161122203436.png</span>
+				<div class="postfoot">
+					 <span class="comment_date">2016-12-20 16:54</span> | <a id="a_comment_author_3585545" href="http://www.cnblogs.com/shanqw/" target="_blank">追风皇帝</a> <a href="http://msg.cnblogs.com/send/%E8%BF%BD%E9%A3%8E%E7%9A%87%E5%B8%9D" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html#3749575" class="layer">#9楼</a><a name="3749575" id="comment_anchor_3749575"></a><span id="comment-maxId" style="display:none;">3749575</span><span id="comment-maxDate" style="display:none;">2017/8/3 9:43:44</span>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_3749575" class="blog_comment_body">mark</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3749575,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3749575,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3749575_avatar" style="display:none;">http://pic.cnblogs.com/face/u94181.jpg</span>
+				<div class="postfoot">
+					 <span class="comment_date">2017-08-03 09:43</span> | <a id="a_comment_author_3749575" href="http://www.cnblogs.com/andyz168/" target="_blank">lovejean</a> <a href="http://msg.cnblogs.com/send/lovejean" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+</div>
+<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html#" onclick="return RefreshPage();">刷新页面</a><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】50万行VC++源码: 大型组态工控、电力仿真CAD与GIS源码库</a><br><a href="https://cloud.tencent.com/developer/labs?fromSource=gwzcw.436876.436876.436876" target="_blank">【推荐】腾讯云上实验室 1小时搭建人工智能应用</a><br><a href="http://www.gcpowertools.com.cn/products/spreadjs/?utm_source=cnblogs&amp;utm_medium=blogpage&amp;utm_term=bottom&amp;utm_content=SpreadJS&amp;utm_campaign=community" target="_blank">【推荐】可嵌入您系统的“在线Excel”！SpreadJS 纯前端表格控件</a><br><a href="http://click.aliyun.com/m/18488/" target="_blank">【推荐】阿里云“全民云计算”优惠升级</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://www.mtyun.com/promote/69f73a72-f46d-4103-88e5-94ed2f81259d/" target="_blank"><img width="300" height="250" src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/24442-20170921101521025-1845913848.jpg" alt="美团云0921"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="http://news.cnblogs.com/n/578933/" target="_blank">不止是伦敦 最近三年还有这些国家和地区对Uber说不</a><br> ·  <a href="http://news.cnblogs.com/n/578932/" target="_blank">外媒：亚马逊联合竞争对手推广Kindle 在华已野心全无</a><br> ·  <a href="http://news.cnblogs.com/n/578931/" target="_blank">特斯拉的未来在中国，中国将成电动汽车领导者</a><br> ·  <a href="http://news.cnblogs.com/n/578930/" target="_blank">小米就校招风波道歉 对涉事员工通报批评</a><br> ·  <a href="http://news.cnblogs.com/n/578929/" target="_blank">力挽狂澜，重振微软，CEO纳德拉是怎样做到的？</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="https://www.jiguang.cn/devservice?source=bky&amp;hmsr=%E5%8D%9A%E5%AE%A2%E5%9B%AD&amp;hmpl=&amp;hmcu=&amp;hmkw=&amp;hmci=" target="_blank"><img width="468" height="60" src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/24442-20170908132742304-1045119416.gif" alt="极光0908"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/576251/" target="_blank">如何阅读计算机科学类的书</a><br> ·  <a href="http://kb.cnblogs.com/page/578103/" target="_blank">Google 及其云智慧</a><br> ·  <a href="http://kb.cnblogs.com/page/575829/" target="_blank">做到这一点，你也可以成为优秀的程序员</a><br> ·  <a href="http://kb.cnblogs.com/page/566880/" target="_blank">写给立志做码农的大学生</a><br> ·  <a href="http://kb.cnblogs.com/page/569057/" target="_blank">架构腐化之谜</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+</div>
+</div>
+<div id="leftmenu">
+
+
+<h3>导航</h3>
+<ul>
+<li>
+<a id="blog_nav_sitehome" href="http://www.cnblogs.com/">博客园</a></li>
+<li>
+<a id="blog_nav_myhome" class="two_words" href="http://www.cnblogs.com/biyeymyhjob/">首页</a></li>
+<li>
+<a id="blog_nav_newpost" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li>
+<a id="blog_nav_contact" accesskey="9" class="two_words" rel="nofollow" href="https://msg.cnblogs.com/send/as_">联系</a></li>
+<li>
+<a id="blog_nav_rss" class="two_words" href="http://www.cnblogs.com/biyeymyhjob/rss">订阅</a>
+<a id="blog_nav_rss_image" href="http://www.cnblogs.com/biyeymyhjob/rss"><img src="./HTTP请求报文和HTTP响应报文 - as_ - 博客园_files/xml.gif" alt="订阅"></a>
+</li>
+<li>
+<a id="blog_nav_admin" class="two_words" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+
+<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2012/06/01&#39;);return false;">&lt;</a></td><td align="center">2012年7月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2012/08/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">24</td><td class="CalOtherMonthDay" align="center">25</td><td class="CalOtherMonthDay" align="center">26</td><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td></tr><tr><td class="CalWeekendDay" align="center">1</td><td align="center">2</td><td align="center">3</td><td align="center">4</td><td align="center">5</td><td align="center">6</td><td class="CalWeekendDay" align="center">7</td></tr><tr><td class="CalWeekendDay" align="center">8</td><td align="center">9</td><td align="center">10</td><td align="center">11</td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/12.html"><u>12</u></a></td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/13.html"><u>13</u></a></td><td class="CalWeekendDay" align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/14.html"><u>14</u></a></td></tr><tr><td class="CalWeekendDay" align="center">15</td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/16.html"><u>16</u></a></td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/17.html"><u>17</u></a></td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/18.html"><u>18</u></a></td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/19.html"><u>19</u></a></td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/20.html"><u>20</u></a></td><td class="CalWeekendDay" align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/21.html"><u>21</u></a></td></tr><tr><td class="CalWeekendDay" align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/22.html"><u>22</u></a></td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/23.html"><u>23</u></a></td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/24.html"><u>24</u></a></td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/25.html"><u>25</u></a></td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/26.html"><u>26</u></a></td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/27.html"><u>27</u></a></td><td class="CalWeekendDay" align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28.html"><u>28</u></a></td></tr><tr><td class="CalWeekendDay" align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/29.html"><u>29</u></a></td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/30.html"><u>30</u></a></td><td align="center"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/31.html"><u>31</u></a></td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+<meta name="vs_showGrid" content="False">
+
+<h3>公告</h3>
+<div id="blog-news"><div id="profile_block">昵称：<a href="http://home.cnblogs.com/u/biyeymyhjob/">as_</a><br>园龄：<a href="http://home.cnblogs.com/u/biyeymyhjob/" title="入园时间：2012-07-11">5年2个月</a><br>粉丝：<a href="http://home.cnblogs.com/u/biyeymyhjob/followers/">461</a><br>关注：<a href="http://home.cnblogs.com/u/biyeymyhjob/followees/">0</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;c874d6d3-41cb-e111-aa3f-842b2b196315&#39;)">+加关注</a></div></div></div><script type="text/javascript">loadBlogNews();</script>
+
+<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/biyeymyhjob/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+
+</div></div><div id="sidebar_toptags" class="sidebar-block">
+<h3 class="catListTitle">我的标签</h3>
+<div id="MyTag">
+<ul>
+<li><a href="http://www.cnblogs.com/biyeymyhjob/tag/%E7%AC%94%E8%AF%95/">笔试</a>(4)</li><li><a href="http://www.cnblogs.com/biyeymyhjob/tag/OS/">OS</a>(2)</li><li><a href="http://www.cnblogs.com/biyeymyhjob/tag/SMO/">SMO</a>(1)</li><li><a href="http://www.cnblogs.com/biyeymyhjob/tag/socket/">socket</a>(1)</li><li><a href="http://www.cnblogs.com/biyeymyhjob/tag/static/">static</a>(1)</li><li><a href="http://www.cnblogs.com/biyeymyhjob/tag/SVM/">SVM</a>(1)</li><li><a href="http://www.cnblogs.com/biyeymyhjob/tag/Trie/">Trie</a>(1)</li><li><a href="http://www.cnblogs.com/biyeymyhjob/tag/volatile/">volatile</a>(1)</li><li><a href="http://www.cnblogs.com/biyeymyhjob/tag/bytes/">bytes</a>(1)</li><li><a href="http://www.cnblogs.com/biyeymyhjob/tag/C%20str/">C str</a>(1)</li><li><a href="http://www.cnblogs.com/biyeymyhjob/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+		<h3>随笔分类</h3>
+		
+				<ul>
+			
+				<li><a id="CatList_LinkList_0_Link_0" href="http://www.cnblogs.com/biyeymyhjob/category/400821.html">APUE专题(15)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_1" href="http://www.cnblogs.com/biyeymyhjob/category/395261.html">C/C++(30)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_2" href="http://www.cnblogs.com/biyeymyhjob/category/402609.html">Hadoop/MapReduce(13)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_3" href="http://www.cnblogs.com/biyeymyhjob/category/402610.html">Java(1)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_4" href="http://www.cnblogs.com/biyeymyhjob/category/395207.html">OS/Linux(15)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_5" href="http://www.cnblogs.com/biyeymyhjob/category/395292.html">笔试面试题集锦(16)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_6" href="http://www.cnblogs.com/biyeymyhjob/category/395776.html">基础机器学习算法(9)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_7" href="http://www.cnblogs.com/biyeymyhjob/category/396014.html">其他(3)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_8" href="http://www.cnblogs.com/biyeymyhjob/category/395206.html">数据结构与算法(29)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_9" href="http://www.cnblogs.com/biyeymyhjob/category/395365.html">网络及UNP(19)</a></li>
+			
+				</ul>
+			
+	
+		<h3>随笔档案</h3>
+		
+				<ul>
+			
+				<li><a id="CatList_LinkList_1_Link_0" href="http://www.cnblogs.com/biyeymyhjob/archive/2015/07.html">2015年7月 (1)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_1" href="http://www.cnblogs.com/biyeymyhjob/archive/2015/03.html">2015年3月 (1)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_2" href="http://www.cnblogs.com/biyeymyhjob/archive/2014/11.html">2014年11月 (1)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_3" href="http://www.cnblogs.com/biyeymyhjob/archive/2013/05.html">2013年5月 (1)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_4" href="http://www.cnblogs.com/biyeymyhjob/archive/2012/11.html">2012年11月 (4)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_5" href="http://www.cnblogs.com/biyeymyhjob/archive/2012/10.html">2012年10月 (7)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_6" href="http://www.cnblogs.com/biyeymyhjob/archive/2012/09.html">2012年9月 (17)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_7" href="http://www.cnblogs.com/biyeymyhjob/archive/2012/08.html">2012年8月 (59)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_8" href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07.html">2012年7月 (59)</a></li>
+			
+				</ul>
+			
+	</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<h3 class="catListTitle">最新评论</h3>
+<div class="RecentComment" id="RecentComments">
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/31/2615833.html#3790228">1. Re:最短路径—Dijkstra算法和Floyd算法</a></li>
+        <li class="recent_comment_body">非常感谢</li>
+        <li class="recent_comment_author">--learningAgain</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/20/2601655.html#3789175">2. Re:Linux写时拷贝技术(copy-on-write)</a></li>
+        <li class="recent_comment_body">a quite clear and concrete explaination of COW in fork</li>
+        <li class="recent_comment_author">--令狐葱dennis</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/31/2615833.html#3788944">3. Re:最短路径—Dijkstra算法和Floyd算法</a></li>
+        <li class="recent_comment_body">dijkstra算法解释得异常清楚，伪代码也很清晰，但是写到Floyd-WarShall算法就不太认真了噢。谢谢楼主了。</li>
+        <li class="recent_comment_author">--不燥不怕</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/27/2610619.html#3780216">4. Re:Linux虚拟文件系统小结</a></li>
+        <li class="recent_comment_body">您好，请问一下数据结构图用什么软件画的？</li>
+        <li class="recent_comment_author">--microyahoo</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/30/2615542.html#3778583">5. Re:最小生成树-Prim算法和Kruskal算法</a></li>
+        <li class="recent_comment_body">@stevenlii意思就是说 当前 F距D或A中的某一个点最近...</li>
+        <li class="recent_comment_author">--秦·川</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<h3 class="catListTitle">阅读排行榜</h3>
+<div class="RecentComment" id="TopViewPosts"> 
+	<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/31/2615833.html">1. 最短路径—Dijkstra算法和Floyd算法(360670)</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/30/2615542.html">2. 最小生成树-Prim算法和Kruskal算法(154382)</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html">3. HTTP请求报文和HTTP响应报文(86835)</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/23/2605208.html">4. 决策树算法总结(75115)</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/22/2603525.html">5. C++ STL 一般总结(67705)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<h3 class="catListTitle">评论排行榜</h3>
+<div class="RecentComment" id="TopCommentsPosts">
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/31/2615833.html">1. 最短路径—Dijkstra算法和Floyd算法(41)</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/30/2615542.html">2. 最小生成树-Prim算法和Kruskal算法(14)</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html">3. HTTP请求报文和HTTP响应报文(9)</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/09/12/2674004.html">4. C++ STL中的vector的内存分配与释放(9)</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/17/2595249.html">5. TF-IDF及其算法(8)</a></li></ul></div>
+</div></div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div class="RecentComment">
+	<div id="TopDiggPostsBlock"><ul><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/31/2615833.html">1. 最短路径—Dijkstra算法和Floyd算法(61)</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/30/2615542.html">2. 最小生成树-Prim算法和Kruskal算法(29)</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/28/2612910.html">3. HTTP请求报文和HTTP响应报文(19)</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/20/2601655.html">4. Linux写时拷贝技术(copy-on-write)(12)</a></li><li><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/22/2603525.html">5. C++ STL 一般总结(11)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+
+</div>
+</div>
+<div class="clear"></div>
+<div id="footer">
+
+<p id="footer">
+	Powered by: 
+	<br>
+	
+	<a id="Footer1_Hyperlink3" name="Hyperlink1" href="http://www.cnblogs.com/" style="font-family:Verdana;font-size:12px;">博客园</a>
+	<br>
+	Copyright © as_
+</p>
+</div>
+</div>
+
+
+
+<div style="position: static; display: none; width: 0px; height: 0px; border: none; padding: 0px; margin: 0px;"><div id="trans-tooltip"><div id="tip-left-top" style="background: url(&quot;chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left-top.png&quot;);"></div><div id="tip-top" style="background: url(&quot;chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-top.png&quot;) repeat-x;"></div><div id="tip-right-top" style="background: url(&quot;chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right-top.png&quot;);"></div><div id="tip-right" style="background: url(&quot;chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right.png&quot;) repeat-y;"></div><div id="tip-right-bottom" style="background: url(&quot;chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right-bottom.png&quot;);"></div><div id="tip-bottom" style="background: url(&quot;chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-bottom.png&quot;) repeat-x;"></div><div id="tip-left-bottom" style="background: url(&quot;chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left-bottom.png&quot;);"></div><div id="tip-left" style="background: url(&quot;chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left.png&quot;);"></div><div id="trans-content"></div></div><div id="tip-arrow-bottom" style="background: url(&quot;chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-bottom.png&quot;);"></div><div id="tip-arrow-top" style="background: url(&quot;chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-top.png&quot;);"></div></div></body></html>
